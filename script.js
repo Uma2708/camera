@@ -46,6 +46,7 @@ navigator.mediaDevices.getUserMedia(constraints)
 
 //click photo
 captureBtnCont.addEventListener("click", ()=>{
+    captureBtn.classList.add("scale-capture");
     let canvas = document.createElement("canvas");
     let tool = canvas.getContext("2d");
     canvas.width= video.videoWidth;
@@ -61,12 +62,17 @@ captureBtnCont.addEventListener("click", ()=>{
     // let img = document.createElement("img");
     // img.src = imageURL;
     // document.body.append(img);
+    setTimeout(() => {
+        captureBtn.classList.remove("scale-capture");
+    }, 510);
+
 });
 
 recordBtnCont.addEventListener("click", ()=>{
    
     shouldRecord =!shouldRecord;
     if(shouldRecord){
+        recordBtn.classList.add("scale-record");
         //recording start
         recorder.start();
         //start timer
@@ -74,6 +80,7 @@ recordBtnCont.addEventListener("click", ()=>{
     }
 
     else{
+        recordBtn.classList.add("scale-record");
         //stop the recording
         recorder.stop();
         //stop the timer
@@ -108,6 +115,7 @@ function startTimer() {
     }
 
     timerID=setInterval(displayTimer, 1000);
+    count=0;
 
 }
 
@@ -115,4 +123,17 @@ function stopTimer() {
     clearInterval(timerID);
     timer.innerText = "00:00:00";
     timer.style.display = 'none';
-}
+} 
+
+
+//filters add 
+
+let filterLayer = document.querySelector(".filter-layer");
+let allFilters = document.querySelectorAll(".filter");
+
+allFilters.forEach((filterElem) => {
+    filterElem.addEventListener('click', () => {
+        transparentColor = getComputedStyle(filterElem).getPropertyValue('background-color');
+        filterLayer.style.backgroundColor = transparentColor;
+    })
+})
