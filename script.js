@@ -26,10 +26,20 @@ navigator.mediaDevices.getUserMedia(constraints)
 
     recorder.addEventListener("dataavailable",(e)=>{
         chunks.push(e.data);
+        
     });
 
     recorder.addEventListener("stop", ()=>{
-        // let blob = new Blob(chunks)
+        //convert video
+        let blob = new Blob(chunks, {type: 'video/mp4'});
+
+        //download video on desktop
+        let videoURL = URL.createObjectURL(blob);
+        console.log(videoURL);
+
+        let a =document.createElement('a');
+        a.href = videoURL;
+        //store in database
     })
 
 });
@@ -56,7 +66,7 @@ captureBtnCont.addEventListener("click", ()=>{
 recordBtnCont.addEventListener("click", ()=>{
    
     shouldRecord =!shouldRecord;
-    if(shouldREcord){
+    if(shouldRecord){
         //recording start
         recorder.start();
         //start timer
@@ -70,3 +80,39 @@ recordBtnCont.addEventListener("click", ()=>{
         stopTimer();
     }
 });
+
+let timer = document.querySelector('.timer');
+
+let counter = 0;
+let timerID;
+function startTimer() {
+    timer.style.display = 'block';
+    function displayTimer(){
+        let totalSeconds = counter;
+
+        let hours = Number.parseInt(totalSeconds / 3600);
+        totalSeconds = totalSeconds % 3600;
+
+        let minutes = Number.parseInt(totalSeconds / 60);
+        totalSeconds = totalSeconds % 60;
+
+        let seconds = totalSeconds;
+
+        hours = (hours < 10) ? `0 ${hours}` : hours;
+        minutes = minutes < 10 ? `0 ${minutes}` : minutes;
+        seconds = seconds < 10 ? `0 ${seconds}` : seconds;
+        timer.innerText = `${hours}:${minutes}:${seconds}`;
+
+        counter++;
+
+    }
+
+    timerID=setInterval(displayTimer, 1000);
+
+}
+
+function stopTimer() {
+    clearInterval(timerID);
+    timer.innerText = "00:00:00";
+    timer.style.display = 'none';
+}
