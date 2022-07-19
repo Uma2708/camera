@@ -17,7 +17,7 @@ imageRequest.onsuccess = () => {
         let url = imageObj.url;
 
         imageElem.innerHTML = `
-            <div>
+            <div class="media">
             <img src="${url}"/>
             </div>
             <div class="delete action-btn">DELETE</div>
@@ -25,6 +25,11 @@ imageRequest.onsuccess = () => {
         `;
 
         galleryCont.appendChild(imageElem);
+        let deleteBtn = imageElem.querySelector(".delete");
+        deleteBtn.addEventListener("click", deleteListener);
+
+        let downloadBtn = imageElem.querySelector(".download");
+        downloadBtn.addEventListener("click", downloadListener);
     });
 
 };
@@ -45,20 +50,20 @@ videoRequest.onsuccess = () => {
         let videoElem = document.createElement("div");
         videoElem.setAttribute("class", "media-cont");
         videoElem.setAttribute("id", videoObj.id);
-        let url = videoObj.url;
+        let url = URL.createObjectURL(videoObj.blobData);
 
         videoElem.innerHTML = `
-            <div>
-            <video autoplay loop src="${url}"/></video>
+        <div class="media">
+            <video autoplay loop src="${url}"></video>
             </div>
             <div class="delete action-btn">DELETE</div>
             <div class="download action-btn">DOWNLOAD</div>
         `;
 
         galleryCont.appendChild(videoElem);
-        let deleteBtn = document.querySelector(".delete");
+        let deleteBtn = videoElem.querySelector(".delete");
         deleteBtn.addEventListener("click", deleteListener);
-        let downloadBtn = document.querySelector(".download");
+        let downloadBtn = videoElem.querySelector(".download");
         downloadBtn.addEventListener("click", downloadListener);
       });
     };
@@ -85,7 +90,7 @@ function deleteListener(e) {
     e.target.parentElement.remove();
   }
 
-  function downloadListener() {
+  function downloadListener(e) {
     let id = e.target.parentElement.getAttribute("id");
     let type = id.split("-")[0];
     if (type == "vid") {
@@ -94,10 +99,10 @@ function deleteListener(e) {
       let videoRequest = videoStore.get(id);
       videoRequest.onsuccess = () => {
         let videoResult = videoRequest.result;
-        let videoURL = videoResult.url;
+        let url = URL.createObjectURL(videoResult.blobData);
   
         let a = document.createElement("a");
-        a.href = videoURL;
+        a.href = url;
         a.download = "video.mp4";
         a.click();
   
@@ -114,7 +119,7 @@ function deleteListener(e) {
   
         let a = document.createElement("a");
         a.href = imageURL;
-        a.download = "pic.mp4";
+        a.download = "pic.png";
         a.click();
       };
     }
