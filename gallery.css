@@ -7,7 +7,6 @@ body{
 }
 h1{
     margin: 0 auto;
-   border-right: 12px;
     
 }
 .back{
@@ -33,4 +32,28 @@ h1{
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
+}
+
+.media-cont{
+    height: 15rem;
+    width: 15rem;
+    /* background-color: rgb(4, 33, 4); */
+    border: 10px solid white;
+    margin: 2rem;
+}
+
+.action-btn{
+    height:2rem;
+    color:white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.download{
+    background-color: black;
+}
+
+.delete{
+    background-color: red;
 }
